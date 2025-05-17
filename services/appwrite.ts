@@ -6,7 +6,7 @@ const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
 
 const client = new Client()
     .setEndpoint('https://fra.cloud.appwrite.io/v1')
-    .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!)
+    .setProject('682574b30035858367b7')
     .setPlatform('com.jsm.movieapp');
 
 
@@ -51,4 +51,18 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
     throw error;
 }
     // console.log(result);
+}
+
+export const getTrendingMovies = async (): Promise<TrendingMovie[] | undefined> => {
+    try {
+        const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+            Query.limit(5),
+            Query.orderDesc('count'),
+        ])
+        return result.documents as unknown as TrendingMovie[];
+
+    } catch (error) {
+        console.log(error);
+        return undefined;
+    }
 }
